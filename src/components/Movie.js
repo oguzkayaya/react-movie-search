@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import axios from "axios";
 import MovieTable from "./MovieTable.js";
 import MovieSearch from "./MovieSearch.js";
+import MoviePage from "./MoviePage.js";
+import { Route } from "react-router-dom";
 
 const apikey = "fabcf2e0";
 
@@ -30,7 +32,7 @@ export class Movie extends Component {
       page +
       "&apikey=" +
       apikey;
-      
+
     axios.get(url).then((res) => {
       if (res.data.Response === "True")
         this.setState({ movieList: res.data.Search, error: "" });
@@ -42,11 +44,20 @@ export class Movie extends Component {
 
   render() {
     return (
-      <div style={{ textAlign: "center", padding: "10px" }}>
-        <MovieSearch searchMovies={this.searchMovies}></MovieSearch>
-        {this.state.error}
-        <MovieTable movieList={this.state.movieList}></MovieTable>
-      </div>
+      <React.Fragment>
+        <Route
+          exact
+          path="/"
+          render={() => (
+            <div style={{ textAlign: "center", padding: "10px" }}>
+              <MovieSearch searchMovies={this.searchMovies}></MovieSearch>
+              {this.state.error}
+              <MovieTable movieList={this.state.movieList}></MovieTable>
+            </div>
+          )}
+        ></Route>
+        <Route exact path="/movie-info/:imdbID" component={MoviePage}></Route>
+      </React.Fragment>
     );
   }
 }

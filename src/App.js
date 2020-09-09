@@ -1,5 +1,7 @@
 import React, { Component } from "react";
-import Movie from "./components/Movie.js"
+import Movie from "./components/Movie.js";
+import Header from "./components/Header.js";
+import { BrowserRouter } from "react-router-dom";
 
 export class App extends Component {
   state = {
@@ -9,7 +11,10 @@ export class App extends Component {
   render() {
     return (
       <div>
-       <Movie></Movie>
+        <BrowserRouter>
+          <Header></Header>
+          <Movie></Movie>
+        </BrowserRouter>
       </div>
     );
   }

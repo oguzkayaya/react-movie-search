@@ -85,7 +85,7 @@ export class MovieSearch extends Component {
             value="Next Page"
             onClick={this.searchNextPage}
           />
-          <hr/>
+          <hr />
         </form>
       </div>
     );
