@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import axios from "axios";
+import { Link } from "react-router-dom";
 
 const apikey = "fabcf2e0";
 
@@ -27,6 +28,9 @@ export class MoviePage extends Component {
     if (this.state.error === "")
       return (
         <div style={{ textAlign: "center", padding: "20px" }}>
+        <Link style={{ textDecoration: "inherit", color: "inherit", float: "left" }} to="/">
+        Back To Search Page
+      </Link>
           <div>
             <div style={titleStyle}>{this.state.movieInfo.Title}</div>
             {this.state.movieInfo.Runtime} <b>|</b> {this.state.movieInfo.Genre}{" "}
@@ -68,9 +72,5 @@ const titleStyle = {
   fontWeight: "bold",
 };
 
-const spanStyle = {
-  padding: "20px",
-  height: "20px",
-};
 
 export default MoviePage;
