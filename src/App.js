@@ -1,23 +1,20 @@
-import React, { Component } from "react";
+import React from "react";
 import Movie from "./components/Movie.js";
 import Header from "./components/Header.js";
 import { BrowserRouter } from "react-router-dom";
+import { MovieProvider } from "./contexts/MovieContext.js";
 
-export class App extends Component {
-  state = {
-    movieList: [],
-  };
-
-  render() {
-    return (
-      <div>
-        <BrowserRouter>
+const App = () => {
+  return (
+    <div>
+      <BrowserRouter>
+        <MovieProvider>
           <Header></Header>
           <Movie></Movie>
-        </BrowserRouter>
-      </div>
-    );
-  }
-}
+        </MovieProvider>
+      </BrowserRouter>
+    </div>
+  );
+};
 
 export default App;

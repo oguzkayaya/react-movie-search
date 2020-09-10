@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 
 const apikey = "fabcf2e0";
 
-export class MoviePage extends Component {
+export class MovieInfoPage extends Component {
   state = {
     movieInfo: {},
     error: "",
@@ -28,9 +28,16 @@ export class MoviePage extends Component {
     if (this.state.error === "")
       return (
         <div style={{ textAlign: "center", padding: "20px" }}>
-        <Link style={{ textDecoration: "inherit", color: "inherit", float: "left" }} to="/">
-        Back To Search Page
-      </Link>
+          <Link
+            style={{
+              textDecoration: "inherit",
+              color: "inherit",
+              float: "left",
+            }}
+            to="/"
+          >
+            Back To Search Page
+          </Link>
           <div>
             <div style={titleStyle}>{this.state.movieInfo.Title}</div>
             {this.state.movieInfo.Runtime} <b>|</b> {this.state.movieInfo.Genre}{" "}
@@ -72,5 +79,4 @@ const titleStyle = {
   fontWeight: "bold",
 };
 
-
-export default MoviePage;
+export default MovieInfoPage;
