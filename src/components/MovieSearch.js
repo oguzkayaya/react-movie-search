@@ -10,23 +10,40 @@ const MovieSearch = () => {
   const [type, setType] = useState("");
   const [page, setPage] = useState(1);
 
+  const [searchState, setSearchState] = useState({
+    title: "Pokemon",
+    year: "",
+    type: "",
+    page: 1,
+  });
+
+  const [stateForButtonClicks, setStateForButtonClicks] = useState({});
+
   const [movieList, setMovieList] = useContext(MovieContext);
 
   useEffect(() => {
     callApiUpdateMovieList();
-  }, []);
+  }, [stateForButtonClicks]);
 
   const searchMovies = async (e) => {
     e.preventDefault();
-    setPage(1);
-    callApiUpdateMovieList();
+    setSearchState({ ...searchState, page: 1 });
+    setStateForButtonClicks(searchState);
   };
 
   const callApiUpdateMovieList = () => {
-    const searchTitle = title ? "s=" + title : "";
-    const searchYear = year ? "&y=" + year : "";
-    const searchType = type ? "&type=" + type : "";
-    const searchPage = page ? "&page=" + page : "";
+    const searchTitle = searchState.title
+      ? "s=" + searchState.title
+      : "";
+    const searchYear = searchState.year
+      ? "&y=" + searchState.year
+      : "";
+    const searchType = searchState.type
+      ? "&type=" + searchState.type
+      : "";
+    const searchPage = searchState.page
+      ? "&page=" + searchState.page
+      : "";
     const url =
       "http://www.omdbapi.com/?" +
       searchTitle +
@@ -42,16 +59,16 @@ const MovieSearch = () => {
   };
 
   const searchPreviusPage = () => {
-    if (page > 1) {
-      setPage(page - 1);
-      callApiUpdateMovieList();
+    if (searchState.page > 1) {
+      setSearchState({ ...searchState, page: searchState.page - 1 });
+      setStateForButtonClicks(searchState);
     }
   };
 
   const searchNextPage = () => {
-    if (page <= 100) {
-      setPage(page + 1);
-      callApiUpdateMovieList();
+    if (searchState.page <= 100) {
+      setSearchState({ ...searchState, page: searchState.page + 1 });
+      setStateForButtonClicks(searchState);
     }
   };
 
@@ -63,9 +80,9 @@ const MovieSearch = () => {
           <input
             type="text"
             name="title"
-            value={title}
+            value={searchState.title}
             onChange={(e) => {
-              setTitle(e.target.value);
+              setSearchState({ ...searchState, title: e.target.value });
             }}
           />
         </label>
@@ -75,9 +92,9 @@ const MovieSearch = () => {
           <input
             type="text"
             name="year"
-            value={year}
+            value={searchState.year}
             onChange={(e) => {
-              setYear(e.target.value);
+              setSearchState({ ...searchState, year: e.target.value });
             }}
           />
         </label>
@@ -87,9 +104,9 @@ const MovieSearch = () => {
           <input
             type="text"
             name="type"
-            value={type}
+            value={searchState.type}
             onChange={(e) => {
-              setType(e.target.value);
+              setSearchState({ ...searchState, type: e.target.value });
             }}
           />
         </label>
@@ -97,7 +114,7 @@ const MovieSearch = () => {
         <input type="submit" value="Search" />
         <br />
         <hr />
-        <label>Page: {page}</label>
+        <label>Page: {searchState.page}</label>
         <br />
         <input type="button" value="Previus Page" onClick={searchPreviusPage} />
         <input type="button" value="Next Page" onClick={searchNextPage} />
