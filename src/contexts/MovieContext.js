@@ -6,7 +6,6 @@ const initialState = {
   loading: true,
   search: [],
   error: "",
-  warning: "",
 };
 
 const reducer = (state, action) => {
@@ -28,12 +27,6 @@ const reducer = (state, action) => {
         ...state,
         loading: true,
       };
-    case "WARNING": {
-      return {
-        ...state,
-        warning: `WARNING: ${action.payload.message}`,
-      };
-    }
     default:
       return state;
   }

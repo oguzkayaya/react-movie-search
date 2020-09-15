@@ -4,11 +4,10 @@ import { MovieContext } from "../contexts/MovieContext.js";
 
 const MovieTable = () => {
   const { movieListState, movieListDispatch } = useContext(MovieContext);
-  if (movieListState.loading === true) return <div>Loading</div>;
+  if (movieListState.loading === true) return <div>Loading...</div>;
   if (movieListState.search)
     return (
       <div>
-        <div>{movieListState.warning}</div>
         <table style={{ width: "100%" }}>
           <thead>
             <tr>

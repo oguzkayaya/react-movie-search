@@ -21,43 +21,21 @@ const MovieSearch = () => {
 
   const searchMovies = (e) => {
     e.preventDefault();
-    if (
-      searchValuesState.title === searchState.title &&
-      searchValuesState.year === searchState.year &&
-      searchValuesState.type === searchState.type &&
-      searchValuesState.page === 1
-    ) {
-      movieListDispatch({
-        type: "WARNING",
-        payload: {
-          message: "Same Inputs",
-        },
-      });
-    } else {
-      searchValuesDispatch({
-        type: "UPDATE",
-        payload: {
-          title: searchState.title,
-          year: searchState.year,
-          type: searchState.type,
-        },
-      });
-    }
+
+    searchValuesDispatch({
+      type: "UPDATE",
+      payload: {
+        title: searchState.title,
+        year: searchState.year,
+        type: searchState.type,
+      },
+    });
   };
 
   const searchPreviusPage = () => {
-    if (searchValuesState.page === 1) {
-      movieListDispatch({
-        type: "WARNING",
-        payload: {
-          message: "Page can not be lower then 1",
-        },
-      });
-    } else {
-      searchValuesDispatch({
-        type: "DECREMENTPAGE",
-      });
-    }
+    searchValuesDispatch({
+      type: "DECREMENTPAGE",
+    });
   };
 
   const searchNextPage = () => {
@@ -105,15 +83,36 @@ const MovieSearch = () => {
           />
         </label>
         <br />
-        <input type="submit" value="Search" />
+        <input
+          type="submit"
+          value="Search"
+          disabled={
+            (searchValuesState.title === searchState.title &&
+              searchValuesState.year === searchState.year &&
+              searchValuesState.type === searchState.type &&
+              searchValuesState.page === 1) ||
+            movieListState.loading
+              ? true
+              : false
+          }
+        />
         <br />
         <hr />
         <label>Page: {searchValuesState.page}</label>
         <br />
-        <input type="button" value="Previus Page" onClick={searchPreviusPage} />
         <input
           type="button"
-          disabled={movieListState.error ? true : false}
+          value="Previus Page"
+          disabled={
+            searchValuesState.page > 1 && !movieListState.loading ? false : true
+          }
+          onClick={searchPreviusPage}
+        />
+        <input
+          type="button"
+          disabled={
+            movieListState.error || movieListState.loading ? true : false
+          }
           value="Next Page"
           onClick={searchNextPage}
         />

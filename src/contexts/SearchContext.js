@@ -57,6 +57,7 @@ export const SearchProvider = (props) => {
 
 function callApi(url, movieListDispatch) {
   movieListDispatch({ type: "LOADING" });
+
   Axios.get(url)
     .then((res) => {
       if (res.data.Response === "True") {
