@@ -3,10 +3,12 @@ import MovieRow from "./MovieRow.js";
 import { MovieContext } from "../contexts/MovieContext.js";
 
 const MovieTable = () => {
-  const [movieList] = useContext(MovieContext);
-  if (movieList.Response === "True")
+  const { movieListState, movieListDispatch } = useContext(MovieContext);
+  if (movieListState.loading === true) return <div>Loading</div>;
+  if (movieListState.search)
     return (
       <div>
+        <div>{movieListState.warning}</div>
         <table style={{ width: "100%" }}>
           <thead>
             <tr>
@@ -17,14 +19,14 @@ const MovieTable = () => {
             </tr>
           </thead>
           <tbody>
-            {movieList.Search.map((movie, index) => (
+            {movieListState.search.map((movie, index) => (
               <MovieRow key={index} movie={movie}></MovieRow>
             ))}
           </tbody>
         </table>
       </div>
     );
-  else return <div>{movieList.Error}</div>;
+  else return <div>{movieListState.error}</div>;
 };
 
 export default MovieTable;

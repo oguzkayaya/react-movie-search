@@ -1,75 +1,69 @@
 import React, { useContext, useState, useEffect } from "react";
 import { MovieContext } from "../contexts/MovieContext.js";
-import axios from "axios";
-
-const apikey = "fabcf2e0";
+import { SearchContext } from "../contexts/SearchContext.js";
 
 const MovieSearch = () => {
-  const [title, setTitle] = useState("Pokemon");
-  const [year, setYear] = useState("");
-  const [type, setType] = useState("");
-  const [page, setPage] = useState(1);
-
   const [searchState, setSearchState] = useState({
-    title: "Pokemon",
+    title: "",
     year: "",
     type: "",
-    page: 1,
   });
-
-  const [stateForButtonClicks, setStateForButtonClicks] = useState({});
-
-  const [movieList, setMovieList] = useContext(MovieContext);
+  const { searchValuesState, searchValuesDispatch } = useContext(SearchContext);
+  const { movieListState, movieListDispatch } = useContext(MovieContext);
 
   useEffect(() => {
-    callApiUpdateMovieList();
-  }, [stateForButtonClicks]);
-
-  const searchMovies = async (e) => {
-    e.preventDefault();
-    setSearchState({ ...searchState, page: 1 });
-    setStateForButtonClicks(searchState);
-  };
-
-  const callApiUpdateMovieList = () => {
-    const searchTitle = searchState.title
-      ? "s=" + searchState.title
-      : "";
-    const searchYear = searchState.year
-      ? "&y=" + searchState.year
-      : "";
-    const searchType = searchState.type
-      ? "&type=" + searchState.type
-      : "";
-    const searchPage = searchState.page
-      ? "&page=" + searchState.page
-      : "";
-    const url =
-      "http://www.omdbapi.com/?" +
-      searchTitle +
-      searchYear +
-      searchType +
-      searchPage +
-      "&apikey=" +
-      apikey;
-
-    axios.get(url).then((res) => {
-      setMovieList(res.data);
+    setSearchState({
+      title: searchValuesState.title,
+      year: searchValuesState.year,
+      type: searchValuesState.type,
     });
+  }, []);
+
+  const searchMovies = (e) => {
+    e.preventDefault();
+    if (
+      searchValuesState.title === searchState.title &&
+      searchValuesState.year === searchState.year &&
+      searchValuesState.type === searchState.type &&
+      searchValuesState.page === 1
+    ) {
+      movieListDispatch({
+        type: "WARNING",
+        payload: {
+          message: "Same Inputs",
+        },
+      });
+    } else {
+      searchValuesDispatch({
+        type: "UPDATE",
+        payload: {
+          title: searchState.title,
+          year: searchState.year,
+          type: searchState.type,
+        },
+      });
+    }
   };
 
   const searchPreviusPage = () => {
-    if (searchState.page > 1) {
-      setSearchState({ ...searchState, page: searchState.page - 1 });
-      setStateForButtonClicks(searchState);
+    if (searchValuesState.page === 1) {
+      movieListDispatch({
+        type: "WARNING",
+        payload: {
+          message: "Page can not be lower then 1",
+        },
+      });
+    } else {
+      searchValuesDispatch({
+        type: "DECREMENTPAGE",
+      });
     }
   };
 
   const searchNextPage = () => {
-    if (searchState.page <= 100) {
-      setSearchState({ ...searchState, page: searchState.page + 1 });
-      setStateForButtonClicks(searchState);
-    }
+    searchValuesDispatch({
+      type: "INCREMENTPAGE",
+    });
   };
 
   return (
@@ -114,10 +108,15 @@ const MovieSearch = () => {
         <input type="submit" value="Search" />
         <br />
         <hr />
-        <label>Page: {searchState.page}</label>
+        <label>Page: {searchValuesState.page}</label>
         <br />
         <input type="button" value="Previus Page" onClick={searchPreviusPage} />
-        <input type="button" value="Next Page" onClick={searchNextPage} />
+        <input
+          type="button"
+          disabled={movieListState.error ? true : false}
+          value="Next Page"
+          onClick={searchNextPage}
+        />
         <hr />
       </form>
     </div>

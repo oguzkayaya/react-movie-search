@@ -48,7 +48,7 @@ export class MovieInfoPage extends Component {
             <div style={{ width: "30%" }}>
               <img
                 src={this.state.movieInfo.Poster}
-                alt="{this.state.movieInfo.Title}"
+                alt={this.state.movieInfo.Title}
               />
             </div>
             <div style={{ textAlign: "left", padding: "0 20px" }}>
