@@ -6,11 +6,13 @@ import {
 
 const initialState = {
   loading: false,
-  movies: [],
+  movies: [
+    { Title: "title1", Year: "year1", imdbID: "imdbID1", Type: "Type1" },
+  ],
   error: "",
 };
 
-const movieListReducer = (state = initialState, actin) => {
+const movieListReducer = (state = initialState, action) => {
   switch (action.type) {
     case FETCH_LOADING:
       return {
@@ -31,6 +33,8 @@ const movieListReducer = (state = initialState, actin) => {
         movies: [],
         error: action.payload,
       };
+    default:
+      return state;
   }
 };
 

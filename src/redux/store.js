@@ -1,5 +1,5 @@
-const { createStore } = require("redux");
-const { default: movieListReducer } = require("./movieList/movieListReducer");
+import { createStore } from "redux";
+import movieListReducer from "./movieList/movieListReducer";
 
 const store = createStore(movieListReducer);
 

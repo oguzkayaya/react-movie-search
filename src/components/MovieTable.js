@@ -1,11 +1,12 @@
 import React, { useContext } from "react";
 import MovieRow from "./MovieRow.js";
 import { MovieContext } from "../contexts/MovieContext.js";
+import { connect } from "react-redux";
 
-const MovieTable = () => {
-  const { movieListState, movieListDispatch } = useContext(MovieContext);
-  if (movieListState.loading === true) return <div>Loading...</div>;
-  if (movieListState.search)
+const MovieTable = (props) => {
+  console.log(props.movies);
+  if (props.loading === true) return <div>Loading...</div>;
+  if (props.movies)
     return (
       <div>
         <table style={{ width: "100%" }}>
@@ -18,14 +19,22 @@ const MovieTable = () => {
             </tr>
           </thead>
           <tbody>
-            {movieListState.search.map((movie, index) => (
+            {props.movies.map((movie, index) => (
               <MovieRow key={index} movie={movie}></MovieRow>
             ))}
           </tbody>
         </table>
       </div>
     );
-  else return <div>{movieListState.error}</div>;
+  else return <div>{props.error}</div>;
 };
 
-export default MovieTable;
+const mapStateToProps = (state) => {
+  return {
+    loading: state.loading,
+    movies: state.movies,
+    error: state.error,
+  };
+};
+
+export default connect(mapStateToProps)(MovieTable);
