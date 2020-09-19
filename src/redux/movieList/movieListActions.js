@@ -26,8 +26,7 @@ export const fetchFailue = (error) => {
   };
 };
 
-export const fetchMovies = () => {
-  const url = "http://www.omdbapi.com/?s=pokemon&apikey=fabcf2e0";
+export const fetchMovies = (url) => {
   return (dispatch) => {
     dispatch(fetchLoading());
     axios

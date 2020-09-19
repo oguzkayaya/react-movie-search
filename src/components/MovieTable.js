@@ -4,11 +4,6 @@ import { connect } from "react-redux";
 import { fetchMovies } from "../redux/movieList/movieListActions.js";
 
 const MovieTable = (props) => {
-  console.log(props.error);
-
-  useEffect(() => {
-    props.fetchMovies();
-  }, []);
   if (props.loading) return <div>Loading...</div>;
   else if (props.error !== "") return <div>{props.error}</div>;
   else if (props.movies !== [])

@@ -1,48 +1,77 @@
 import React, { useContext, useState, useEffect } from "react";
+import { connect } from "react-redux";
 import { MovieContext } from "../contexts/MovieContext.js";
 import { SearchContext } from "../contexts/SearchContext.js";
+import { fetchMovies } from "../redux/movieList/movieListActions.js";
 
-const MovieSearch = () => {
+const MovieSearch = (props) => {
+  const apikey = "fabcf2e0";
+
   const [searchState, setSearchState] = useState({
-    title: "",
+    title: "Pokemon",
     year: "",
     type: "",
+    page: 1,
   });
-  const { searchValuesState, searchValuesDispatch } = useContext(SearchContext);
-  const { movieListState, movieListDispatch } = useContext(MovieContext);
 
-  useEffect(() => {
-    setSearchState({
-      title: searchValuesState.title,
-      year: searchValuesState.year,
-      type: searchValuesState.type,
-    });
-  }, []);
+  // const { searchValuesState, searchValuesDispatch } = useContext(SearchContext);
+  // const { movieListState, movieListDispatch } = useContext(MovieContext);
+
+  // useEffect(() => {
+  //   setSearchState({
+  //     title: searchValuesState.title,
+  //     year: searchValuesState.year,
+  //     type: searchValuesState.type,
+  //   });
+  // }, []);
+
+  // const searchMovies = (e) => {
+  //   e.preventDefault();
+
+  //   searchValuesDispatch({
+  //     type: "UPDATE",
+  //     payload: {
+  //       title: searchState.title,
+  //       year: searchState.year,
+  //       type: searchState.type,
+  //     },
+  //   });
+  // };
+
+  // const searchPreviusPage = () => {
+  //   searchValuesDispatch({
+  //     type: "DECREMENTPAGE",
+  //   });
+  // };
+
+  // const searchNextPage = () => {
+  //   searchValuesDispatch({
+  //     type: "INCREMENTPAGE",
+  //   });
+  // };
 
   const searchMovies = (e) => {
     e.preventDefault();
-
-    searchValuesDispatch({
-      type: "UPDATE",
-      payload: {
-        title: searchState.title,
-        year: searchState.year,
-        type: searchState.type,
-      },
-    });
+    const url = createUrl(searchState, apikey);
+    console.log(url);
+    props.fetchMovies(url);
   };
 
-  const searchPreviusPage = () => {
-    searchValuesDispatch({
-      type: "DECREMENTPAGE",
-    });
-  };
-
-  const searchNextPage = () => {
-    searchValuesDispatch({
-      type: "INCREMENTPAGE",
-    });
-  };
+  function createUrl(state, apikey) {
+    const searchTitle = state.title ? "s=" + state.title : "";
+    const searchYear = state.year ? "&y=" + state.year : "";
+    const searchType = state.type ? "&type=" + state.type : "";
+    const searchPage = state.page ? "&page=" + state.page : "";
+    const url =
+      "http://www.omdbapi.com/?" +
+      searchTitle +
+      searchYear +
+      searchType +
+      searchPage +
+      "&apikey=" +
+      apikey;
+    return url;
+  }
 
   return (
     <div>
@@ -83,6 +112,13 @@ const MovieSearch = () => {
           />
         </label>
         <br />
+        <input type="submit" value="Search" />
+        <hr />
+      </form>
+      {/* <form onSubmit={searchMovies}>
+        
+        
+        <br />
         <input
           type="submit"
           value="Search"
@@ -117,9 +153,25 @@ const MovieSearch = () => {
           onClick={searchNextPage}
         />
         <hr />
-      </form>
+      </form> */}
     </div>
   );
 };
 
-export default MovieSearch;
+const mapStateToProps = (state) => {
+  return {
+    loading: state.loading,
+    movies: state.movies,
+    error: state.error,
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    fetchMovies: (url) => {
+      dispatch(fetchMovies(url));
+    },
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(MovieSearch);
