@@ -1,12 +1,17 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import MovieRow from "./MovieRow.js";
-import { MovieContext } from "../contexts/MovieContext.js";
 import { connect } from "react-redux";
+import { fetchMovies } from "../redux/movieList/movieListActions.js";
 
 const MovieTable = (props) => {
-  console.log(props.movies);
-  if (props.loading === true) return <div>Loading...</div>;
-  if (props.movies)
+  console.log(props.error);
+
+  useEffect(() => {
+    props.fetchMovies();
+  }, []);
+  if (props.loading) return <div>Loading...</div>;
+  else if (props.error !== "") return <div>{props.error}</div>;
+  else if (props.movies !== [])
     return (
       <div>
         <table style={{ width: "100%" }}>
@@ -26,7 +31,6 @@ const MovieTable = (props) => {
         </table>
       </div>
     );
-  else return <div>{props.error}</div>;
 };
 
 const mapStateToProps = (state) => {
@@ -37,4 +41,12 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps)(MovieTable);
+const mapDispatchToProps = (dispatch) => {
+  return {
+    fetchMovies: () => {
+      dispatch(fetchMovies());
+    },
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(MovieTable);
