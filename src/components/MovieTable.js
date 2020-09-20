@@ -1,7 +1,6 @@
 import React, { useContext, useEffect } from "react";
 import MovieRow from "./MovieRow.js";
 import { connect } from "react-redux";
-import { fetchMovies } from "../redux/movieList/movieListActions.js";
 
 const MovieTable = (props) => {
   if (props.loading) return <div>Loading...</div>;
@@ -36,12 +35,4 @@ const mapStateToProps = (state) => {
   };
 };
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    fetchMovies: () => {
-      dispatch(fetchMovies());
-    },
-  };
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(MovieTable);
+export default connect(mapStateToProps, null)(MovieTable);

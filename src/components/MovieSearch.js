@@ -113,7 +113,7 @@ const MovieSearch = (props) => {
             type="button"
             value="Next Page"
             onClick={(e) => searchMovies(e, searchState.page + 1)}
-            disabled={props.loading || searchState.page >= 100 || props.error}
+            disabled={props.loading || props.error || props.movies.length < 10}
           />
         </div>
 
