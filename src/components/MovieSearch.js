@@ -93,61 +93,32 @@ const MovieSearch = (props) => {
           />
         </label>
         <br />
-        <input type="submit" value="Search" onClick={searchMovies} />
-        <hr />
-        Page: {searchState.page}
-        <br />
-        <input
-          type="button"
-          value="Previous Page"
-          onClick={(e) => searchMovies(e, searchState.page - 1)}
-        />
-        <input
-          type="button"
-          value="Next Page"
-          onClick={(e) => searchMovies(e, searchState.page + 1)}
-        />
-        <hr />
-      </form>
-      {/* <form onSubmit={searchMovies}>
-        
-        
-        <br />
         <input
           type="submit"
           value="Search"
-          disabled={
-            (searchValuesState.title === searchState.title &&
-              searchValuesState.year === searchState.year &&
-              searchValuesState.type === searchState.type &&
-              searchValuesState.page === 1) ||
-            movieListState.loading
-              ? true
-              : false
-          }
+          disabled={props.loading}
+          onClick={searchMovies}
         />
-        <br />
+        <div>
+          <hr />
+          Page: {searchState.page}
+          <br />
+          <input
+            type="button"
+            value="Previous Page"
+            onClick={(e) => searchMovies(e, searchState.page - 1)}
+            disabled={props.loading || searchState.page <= 1}
+          />
+          <input
+            type="button"
+            value="Next Page"
+            onClick={(e) => searchMovies(e, searchState.page + 1)}
+            disabled={props.loading || searchState.page >= 100 || props.error}
+          />
+        </div>
+
         <hr />
-        <label>Page: {searchValuesState.page}</label>
-        <br />
-        <input
-          type="button"
-          value="Previus Page"
-          disabled={
-            searchValuesState.page > 1 && !movieListState.loading ? false : true
-          }
-          onClick={searchPreviusPage}
-        />
-        <input
-          type="button"
-          disabled={
-            movieListState.error || movieListState.loading ? true : false
-          }
-          value="Next Page"
-          onClick={searchNextPage}
-        />
-        <hr />
-      </form> */}
+      </form>
     </div>
   );
 };
