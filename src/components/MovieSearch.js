@@ -1,7 +1,5 @@
 import React, { useContext, useState, useEffect } from "react";
 import { connect } from "react-redux";
-import { MovieContext } from "../contexts/MovieContext.js";
-import { SearchContext } from "../contexts/SearchContext.js";
 import { fetchMovies } from "../redux/movieList/movieListActions.js";
 
 const MovieSearch = (props) => {
@@ -14,29 +12,7 @@ const MovieSearch = (props) => {
     page: 1,
   });
 
-  // const { searchValuesState, searchValuesDispatch } = useContext(SearchContext);
-  // const { movieListState, movieListDispatch } = useContext(MovieContext);
-
-  // useEffect(() => {
-  //   setSearchState({
-  //     title: searchValuesState.title,
-  //     year: searchValuesState.year,
-  //     type: searchValuesState.type,
-  //   });
-  // }, []);
-
-  // const searchMovies = (e) => {
-  //   e.preventDefault();
-
-  //   searchValuesDispatch({
-  //     type: "UPDATE",
-  //     payload: {
-  //       title: searchState.title,
-  //       year: searchState.year,
-  //       type: searchState.type,
-  //     },
-  //   });
-  // };
+  const [update, setUpdate] = useState(false);
 
   // const searchPreviusPage = () => {
   //   searchValuesDispatch({
@@ -50,11 +26,16 @@ const MovieSearch = (props) => {
   //   });
   // };
 
-  const searchMovies = (e) => {
-    e.preventDefault();
+  useEffect(() => {
     const url = createUrl(searchState, apikey);
     console.log(url);
     props.fetchMovies(url);
+  }, [update]);
+
+  const searchMovies = (e, p = 1) => {
+    e.preventDefault();
+    setSearchState({ ...searchState, page: p });
+    setUpdate(!update);
   };
 
   function createUrl(state, apikey) {
@@ -75,7 +56,7 @@ const MovieSearch = (props) => {
 
   return (
     <div>
-      <form onSubmit={searchMovies}>
+      <form>
         <label>
           Title
           <input
@@ -112,7 +93,20 @@ const MovieSearch = (props) => {
           />
         </label>
         <br />
-        <input type="submit" value="Search" />
+        <input type="submit" value="Search" onClick={searchMovies} />
+        <hr />
+        Page: {searchState.page}
+        <br />
+        <input
+          type="button"
+          value="Previous Page"
+          onClick={(e) => searchMovies(e, searchState.page - 1)}
+        />
+        <input
+          type="button"
+          value="Next Page"
+          onClick={(e) => searchMovies(e, searchState.page + 1)}
+        />
         <hr />
       </form>
       {/* <form onSubmit={searchMovies}>
