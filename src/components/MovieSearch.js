@@ -124,10 +124,11 @@ const MovieSearch = (props) => {
 };
 
 const mapStateToProps = (state) => {
+  const movieList = state.movie;
   return {
-    loading: state.loading,
-    movies: state.movies,
-    error: state.error,
+    loading: movieList.loading,
+    movies: movieList.movies,
+    error: movieList.error,
   };
 };
 
