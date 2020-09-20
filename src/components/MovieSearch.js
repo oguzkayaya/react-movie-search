@@ -1,41 +1,25 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 import { fetchMovies } from "../redux/movieList/movieListActions.js";
+import { updateSearch } from "../redux/search/searchActions.js";
 
 const MovieSearch = (props) => {
   const apikey = "fabcf2e0";
 
   const [searchState, setSearchState] = useState({
-    title: "Pokemon",
-    year: "",
-    type: "",
-    page: 1,
+    title: props.search.title,
+    year: props.search.year,
+    type: props.search.type,
   });
 
-  const [update, setUpdate] = useState(false);
-
-  // const searchPreviusPage = () => {
-  //   searchValuesDispatch({
-  //     type: "DECREMENTPAGE",
-  //   });
-  // };
-
-  // const searchNextPage = () => {
-  //   searchValuesDispatch({
-  //     type: "INCREMENTPAGE",
-  //   });
-  // };
-
   useEffect(() => {
-    const url = createUrl(searchState, apikey);
-    console.log(url);
+    const url = createUrl(props.search, apikey);
     props.fetchMovies(url);
-  }, [update]);
+  }, [props.search]);
 
   const searchMovies = (e, p = 1) => {
     e.preventDefault();
-    setSearchState({ ...searchState, page: p });
-    setUpdate(!update);
+    props.updateSearch({ ...searchState, page: p });
   };
 
   function createUrl(state, apikey) {
@@ -96,24 +80,28 @@ const MovieSearch = (props) => {
         <input
           type="submit"
           value="Search"
-          disabled={props.loading}
+          disabled={props.movie.loading}
           onClick={searchMovies}
         />
         <div>
           <hr />
-          Page: {searchState.page}
+          Page: {props.search.page}
           <br />
           <input
             type="button"
             value="Previous Page"
-            onClick={(e) => searchMovies(e, searchState.page - 1)}
-            disabled={props.loading || searchState.page <= 1}
+            onClick={(e) => searchMovies(e, props.search.page - 1)}
+            disabled={props.movie.loading || props.search.page <= 1}
           />
           <input
             type="button"
             value="Next Page"
-            onClick={(e) => searchMovies(e, searchState.page + 1)}
-            disabled={props.loading || props.error || props.movies.length < 10}
+            onClick={(e) => searchMovies(e, props.search.page + 1)}
+            disabled={
+              props.movie.loading ||
+              props.movie.error ||
+              props.movie.movies.length < 10
+            }
           />
         </div>
 
@@ -125,10 +113,10 @@ const MovieSearch = (props) => {
 
 const mapStateToProps = (state) => {
   const movieList = state.movie;
+  const search = state.search;
   return {
-    loading: movieList.loading,
-    movies: movieList.movies,
-    error: movieList.error,
+    movie: movieList,
+    search: search,
   };
 };
 
@@ -136,6 +124,9 @@ const mapDispatchToProps = (dispatch) => {
   return {
     fetchMovies: (url) => {
       dispatch(fetchMovies(url));
+    },
+    updateSearch: (searchState) => {
+      dispatch(updateSearch(searchState));
     },
   };
 };

@@ -1,6 +1,6 @@
 import { UPDATE } from "./searchActionTypes";
 
-const update = (newSerch) => {
+export const updateSearch = (newSerch) => {
   return {
     type: UPDATE,
     payload: newSerch,

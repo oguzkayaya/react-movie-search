@@ -10,9 +10,8 @@ const initialState = {
 const searchReducer = (state = initialState, action) => {
   switch (action.type) {
     case UPDATE:
-      return {
-        state: action.payload,
-      };
+      return action.payload;
+
     default:
       return state;
   }

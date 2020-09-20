@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React from "react";
 import MovieRow from "./MovieRow.js";
 import { connect } from "react-redux";
 
